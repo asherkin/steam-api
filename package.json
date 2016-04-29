@@ -1,0 +1,25 @@
+{
+  "name": "steam-api",
+  "version": "0.0.0",
+  "description": "Steam PICS / Community XML Image Proxy",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/asherkin/steam-api"
+  },
+  "author": "Asher Baker <asherkin@limetech.io>",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/asherkin/steam-api/issues"
+  },
+  "dependencies": {
+    "express": "~4.13.4",
+    "request": "^2.72.0",
+    "steam-user": "~3.3.4",
+    "systemd-socket": "0.0.0",
+    "xml2js": "^0.4.16"
+  }
+}
