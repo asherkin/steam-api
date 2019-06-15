@@ -1,3 +1,6 @@
+global._mckay_statistics_opt_out = true;
+process.env.HOME = __dirname + '/cache';
+
 var SteamUser = require('steam-user');
 var Express = require('express');
 
@@ -14,7 +17,12 @@ var user = new SteamUser(null, userOptions);
 user.logOn(); // Log onto Steam anonymously
 
 var app = new Express();
-app.listen(systemdSocket() || 8080);
+
+if (systemdSocket()) {
+  app.listen(systemdSocket());
+} else {
+  app.listen(8001, '127.0.0.1');
+}
 
 app.get('/', function(req, res) {
   res.send('Hi. Please go away. Thanks.');
@@ -52,8 +60,8 @@ app.get('/app/:app/icon.jpg', function(req, res) {
   var apps = [];
   apps[0] = appId;
 
-  user.getProductInfo(apps, [], function(appData, packageData, unknownApps, unknownPackages) {
-    if (unknownApps[0] == appId) {
+  user.getProductInfo(apps, [], function(err, appData, packageData, unknownApps, unknownPackages) {
+    if (err || unknownApps[0] == appId) {
       res.set('Cache-Control', 'public, max-age=86400');
       res.redirect('/public/default.jpg');
       return;
@@ -122,8 +130,6 @@ app.get('/user/:user/icon.jpg', function(req, res) {
         res.redirect('/public/default.jpg');
         return;
       }
-
-      console.log(imageUrl, typeof imageUrl);
 
       if (isSecure) {
         imageUrl = imageUrl.replace('http://cdn.akamai.steamstatic.com/', 'https://steamcdn-a.akamaihd.net/');
